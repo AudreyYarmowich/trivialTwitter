@@ -7,9 +7,8 @@ unread_subscribed_tweets = []
 
 def listening_for_tweets(s):
     while True:
-        data = s.recv(1024)
-        print("message recieved")
-        if (not data == "b'ack'" and not data == "b'nack'"):
+        data = s.recv(1024).decode("utf-8")
+        if (not data == "ack" and not data == "nack"):
             unread_subscribed_tweets.append(data)
 
 def main(argv):
@@ -57,9 +56,26 @@ def main(argv):
                         command_length = len(command.split('"'))
                     if ((command.split()[0], command_length) in valid_commands):
                         if (command.split()[0] == "timeline"):
-                            print("timeline: ")
+                            print("\nTimeline: ")
                             for tweet in unread_subscribed_tweets:
                                 print(username, tweet)
+                            print ('')
+                        elif (command.split()[0] == "subscribe" or command.split()[0] == "unsubscribe" ):
+                            if ((command.split()[1])[0] != '#' or len(command.split()[1].split('#')) != 2):
+                                commandUsage()
+                            else:
+                                s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )    
+                        elif (command.split()[0] == "tweet"):
+                            if ((command.split('"')[2])[1] != '#'):
+                                commandUsage()
+                            elif (len(command.split('"')[1]) < 1):
+                                messageCannotBeEmpty()
+                            elif (len(command.split('"')[1]) > 150):
+                                messageTooLong(len(command.split('"')[1]))
+                            
+                            else:
+                                s.sendall( bytes( str ( ( command ) ), 'utf-8' ) ) 
+
                         else:
                             s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
                             if (command.split('""')[0]  == "exit"):
@@ -70,22 +86,25 @@ def main(argv):
 
 
 def commandUsage():
-    print ("derp")
+    print ('\nCommand Usage Error:')
+    print ('timeline')
+    print ('subscribe #<hastag>')
+    print ('unsubscribe #<hastag>')
+    print ('tweet "<message <= 150 characters>" [#<hastag>]>')
+    print ('exit\n')
 
 def usage():
-    print( '\nUsage Error')
-    print( 'Usage:$ ./ttweetcl <ServerIP> <ServerPort> <Username>' )
+    print( '\nUsage Error:')
+    print( 'Usage:$ ./ttweetcl <ServerIP> <ServerPort> <Username>\n' )
     sys.exit(2)
 
-def messageTooLong():
+def messageTooLong(messageLength):
     print( '\nUsage Error')
-    print( 'Messages cannot be longer than 150 charecters, your message is', len( sys.argv[4] ), ' characeters long' )
-    sys.exit(2)
+    print( 'Messages cannot be longer than 150 charecters, your message is', messageLength , ' characeters long\n' )
 
 def messageCannotBeEmpty():
     print( '\nUsage Error')
-    print( 'Messages to be uploaded must not be empty')
-    sys.exit(2)
+    print( 'Messages to be uploaded must not be empty\n')
 
 def socketError(msg):
     print( 'Socket Error' )

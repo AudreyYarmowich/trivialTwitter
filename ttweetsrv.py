@@ -31,10 +31,13 @@ def handle_client(connection,address,user):
                 print (tags)
                 tweet = str(user) + ": " + str(tweet) + ' ' + ''.join(tags)
                 print (tweet)
-                for t in tags:
-                    if (t in hashtags.keys()):
-                        for u in hashtags[t]:
-                            users[u].sendall( bytes( str ( ( tweet ) ), 'utf-8' ) ) 
+                usersTweetSentTo = [user]
+                for tag in tags:
+                    if (tag in hashtags.keys()):
+                        for u in hashtags[tag]:
+                            if (u not in usersTweetSentTo):
+                                usersTweetSentTo.append(u)
+                                users[u].sendall( bytes( str ( ( tweet ) ), 'utf-8' ) ) 
                 print(tags)
                 connection.sendall( b'ack')
             elif ("unsubscribe" in data.split()[0]):
@@ -85,16 +88,14 @@ def main(argv):
                 s.bind( ( host, int( port ) ) ) # Binds the server to the specified host and port
                 s.listen(1)                     # Server is now listening on the bound host and port
                 conn, addr = s.accept()         # On connection request, complete the three way handshake
-                print('Running connection on', addr)
                 data = conn.recv(1024)  # Handles recieving messages of any length
 
-                user = data[0:len( data )]
+                user = data[0:len( data )].decode("utf-8")
                 if ( user in users.keys() ):
                     conn.sendall( b'error: username already taken' )
                     conn.close()
                 else:       
-                    users[user] = conn      
-                    print(users)   
+                    users[user] = conn
                     conn.sendall( b'200' )
                     thread.start_new_thread(handle_client,(conn,addr,user))             
                        
