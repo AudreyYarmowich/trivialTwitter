@@ -64,10 +64,12 @@ def handle_client(connection,address,user):
                 print (hashtags)
 
             elif ("exit" in data.split()[0]):
+                #TODO: Remove user and connection from all subscriptions
                 users.pop(user, None);
                 connection.close()
                 break
     except ConnectionError as error:
+        #TODO: Remove user and connection from all subscriptions
         print( user , "disconected" )
         connection.close()
         users.pop(user, None)

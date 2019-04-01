@@ -56,10 +56,14 @@ def main(argv):
                         command_length = len(command.split('"'))
                     if ((command.split()[0], command_length) in valid_commands):
                         if (command.split()[0] == "timeline"):
-                            print("\nTimeline: ")
-                            for tweet in unread_subscribed_tweets:
-                                print(username, tweet)
-                            print ('')
+                            if (len(unread_subscribed_tweets) == 0):
+                                print ("\n No new tweets")
+                            else: 
+                                print("\nTimeline: ")
+                                for tweet in unread_subscribed_tweets:
+                                    print(username, tweet)
+                                print ('')
+                                unread_subscribed_tweets.clear()
                         elif (command.split()[0] == "subscribe" or command.split()[0] == "unsubscribe" ):
                             if ((command.split()[1])[0] != '#' or len(command.split()[1].split('#')) != 2):
                                 commandUsage()
