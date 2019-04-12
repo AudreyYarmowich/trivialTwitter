@@ -37,24 +37,24 @@ def handle_client(connection,address,user):
                         for u in hashtags[tag]:
                             if (u not in usersTweetSentTo):
                                 usersTweetSentTo.append(u)
-                                users[u].sendall( bytes( str ( ( tweet ) ), 'utf-8' ) ) 
+                                users[u].sendall( bytes( str ( ( tweet ) ), 'utf-8' ) )
                 print(tags)
                 connection.sendall( b'ack')
             elif ("unsubscribe" in data.split()[0]):
-                tag = data.split()[1][1:-1]
+                tag = '#' + data.split()[1][1:-1]
                 print ("unsubscribe" , tag)
                 if (tag in hashtags.keys() and user in hashtags[tag]):
                     hashtags[tag].remove(user)
                     connection.sendall( b'ack')
-                else: 
+                else:
                     connection.sendall( b'nack')
                 print (hashtags)
-            elif ("subscribe" in data.split()[0]):
+            elif ("subscribe" in data.split()[0] and len(data.split()[1][1:-1]) > 0):
                 tag = '#'+ data.split()[1][1:-1]
                 print ("subscribe" , tag)
                 if (tag in hashtags.keys() and user in hashtags[tag]):
                     connection.sendall( b'nack')
-                elif (tag in hashtags.keys()): 
+                elif (tag in hashtags.keys()):
                     hashtags[tag].append(user)
                     connection.sendall( b'ack')
                 else:
@@ -65,22 +65,31 @@ def handle_client(connection,address,user):
 
             elif ("exit" in data.split()[0]):
                 #TODO: Remove user and connection from all subscriptions
-                users.pop(user, None);
+                for tag in hashtags.keys():
+                    if user in hashtags[tag]:
+                        hashtags[tag].remove(user)
+                users.pop(user)
                 connection.close()
+                print("Connection closed.")
+                print (hashtags)
+                print (users)
                 break
     except ConnectionError as error:
         #TODO: Remove user and connection from all subscriptions
+        for tag in hashtags.keys():
+            if user in hashtags[tag]:
+                hashtags[tag].remove(user)
         print( user , "disconected" )
         connection.close()
-        users.pop(user, None)
+        users.pop(user)
 
 
 def main(argv):
     host = '127.0.0.1'  # Default host ip address (localhost)
-    port = 13069        # Default port to listen on 
+    port = 13069        # Default port to listen on
     if( len( sys.argv ) == 2):
         port = sys.argv[1] # Allows the user to override default host and port #
-    elif( len( sys.argv ) > 2):
+    elif( len( sys.argv ) != 2): #changed from >2 to !=2 because according to PDF if can accept ONE (in bold) argument
         usage()
     print( 'Connected at', host, ':', port )
     while True:
@@ -96,12 +105,12 @@ def main(argv):
                 if ( user in users.keys() ):
                     conn.sendall( b'error: username already taken' )
                     conn.close()
-                else:       
+                else:
                     users[user] = conn
                     conn.sendall( b'200' )
-                    thread.start_new_thread(handle_client,(conn,addr,user))             
-                       
-            except socket.error as msg: 
+                    thread.start_new_thread(handle_client,(conn,addr,user))
+
+            except socket.error as msg:
                 if ( msg.errno == 98 and err98_handler == False ):
                     print( "Server Socket Error" )
                     print( msg )
@@ -116,5 +125,3 @@ def main(argv):
 
 
 main(sys.argv)
-
-

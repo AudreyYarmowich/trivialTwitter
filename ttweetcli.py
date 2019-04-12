@@ -44,6 +44,7 @@ def main(argv):
             print("username already taken")
             sys.exit(2)
         else:
+            print("username valid, connection estabilished")
             thread = threading.Thread(target=listening_for_tweets, args=(s,))
             thread.daemon = True
             thread.start()
@@ -58,7 +59,7 @@ def main(argv):
                         if (command.split()[0] == "timeline"):
                             if (len(unread_subscribed_tweets) == 0):
                                 print ("\n No new tweets")
-                            else: 
+                            else:
                                 print("\nTimeline: ")
                                 for tweet in unread_subscribed_tweets:
                                     print(username, tweet)
@@ -68,7 +69,7 @@ def main(argv):
                             if ((command.split()[1])[0] != '#' or len(command.split()[1].split('#')) != 2):
                                 commandUsage()
                             else:
-                                s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )    
+                                s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
                         elif (command.split()[0] == "tweet"):
                             if ((command.split('"')[2])[1] != '#'):
                                 commandUsage()
@@ -76,9 +77,9 @@ def main(argv):
                                 messageCannotBeEmpty()
                             elif (len(command.split('"')[1]) > 150):
                                 messageTooLong(len(command.split('"')[1]))
-                            
+
                             else:
-                                s.sendall( bytes( str ( ( command ) ), 'utf-8' ) ) 
+                                s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
 
                         else:
                             s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
