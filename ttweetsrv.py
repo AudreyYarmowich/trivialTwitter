@@ -13,7 +13,7 @@ def error(code):
     sys.exit(2)
 
 def usage():
-    print( 'Usage: $ ./ttweetsrv.py <port> (default = 127.0.0.1:13069)' )
+    print( 'Usage: $ ./ttweetsrv.py <port>)' )
     sys.exit(2)
 
 def handle_client(connection,address,user):
@@ -24,13 +24,13 @@ def handle_client(connection,address,user):
             if (data == "b''"):
                 raise ConnectionError('keyboard end connection')
             if ("tweet" in data.split()[0]):
+                print("AAAAAAA")
                 tweet = data.split('"')[1]
-                #check if first char is #
                 tags = data.split('"')[2][:-1].split('#')[1:]
-                
+
                 for i in range(len(tags)):
                     tags[i] = '#'+tags[i]
-                #change code so that tags of size 0 are ilegal
+
                 print (tags)
                 tweet = str(user) + ": " + str(tweet) + ' ' + ''.join(tags)
                 print (tweet)

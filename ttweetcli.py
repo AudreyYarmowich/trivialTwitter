@@ -17,11 +17,11 @@ def main(argv):
     username = ''
     hashtag = ''            # hashtag string
     valid_commands = (("tweet",3),("subscribe",2),("unsubscribe",2),("timeline",1),("exit",1))
-    if( len( sys.argv ) == 1):
+    '''if( len( sys.argv ) == 1):
         host = '127.0.0.1'
         port = 13069
-        username = 'Dril'
-    elif( len( sys.argv ) == 4 ):
+        username = 'Dril' '''
+    if( len( sys.argv ) == 4 ):
         host = sys.argv[1]
         port = sys.argv[2]
         username = sys.argv[3]
@@ -71,17 +71,29 @@ def main(argv):
                             else:
                                 s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
                         elif (command.split()[0] == "tweet"):
+
+                            tags = command.split('"')[2][:-1].split('#')[1:]
+                            flag = 0
+                            if (len(tags) == 0):
+                                flag = 1
+                            for i in range(len(tags)):
+                                if len(tags[i]) == 0:
+                                    flag = 1
+
                             if ((command.split('"')[2])[1] != '#'):
                                 commandUsage()
                             elif (len(command.split('"')[1]) < 1):
                                 messageCannotBeEmpty()
                             elif (len(command.split('"')[1]) > 150):
                                 messageTooLong(len(command.split('"')[1]))
-
+                            elif flag == 1:
+                                hashtagCannotBeOfSizeOne()
                             else:
+                                print("here is the bad boi")
                                 s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
 
                         else:
+                            print("a")
                             s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
                             if (command.split('""')[0]  == "exit"):
                                 sys.exit(0)
@@ -110,6 +122,10 @@ def messageTooLong(messageLength):
 def messageCannotBeEmpty():
     print( '\nUsage Error')
     print( 'Messages to be uploaded must not be empty\n')
+
+def hashtagCannotBeOfSizeOne():
+    print( '\nUsage Error')
+    print( "Hashtag can't be empty\n")
 
 def socketError(msg):
     print( 'Socket Error' )
