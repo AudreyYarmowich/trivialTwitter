@@ -40,6 +40,12 @@ def handle_client(connection,address,user):
                             if (u not in usersTweetSentTo):
                                 usersTweetSentTo.append(u)
                                 users[u].sendall( bytes( str ( ( tweet ) ), 'utf-8' ) )
+                if "#ALL" in hashtags.keys():
+                    for u in hashtags["#ALL"]:
+                        if u not in usersTweetSentTo:
+                            usersTweetSentTo.append(u)
+                            users[u].sendall( bytes( str ( ( tweet ) ), 'utf-8' ) )
+
                 print(tags)
                 connection.sendall( b'ack')
             elif ("unsubscribe" in data.split()[0]):
