@@ -9,7 +9,7 @@ Clients must provide a request for connection. Upon an attempt to connect the se
 creates a new thread to handle requests from that client while the current thread remains 
 waiting for other requests from different clients. When the client estabilishes a connection
 with the server it creates a new thread to listen to tweets that are redirected by the server
-while the current thread deals with requests.
+while the current thread waits for requests from system standard input.
 
 A connection is now established. 
 The server will keep a dictionary (users) with the connectios of every user with the server
