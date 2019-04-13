@@ -12,6 +12,7 @@ def listening_for_tweets(s):
             unread_subscribed_tweets.append(data)
 
 def main(argv):
+    subscriptions = []
     host = ''               # The server's hostname or IP address
     port = ''               # The port used by the server
     username = ''
@@ -67,11 +68,29 @@ def main(argv):
                                     print(username, tweet)
                                 print ('')
                                 unread_subscribed_tweets.clear()
-                        elif (command.split()[0] == "subscribe" or command.split()[0] == "unsubscribe" ):
+                        elif (command.split()[0] == "subscribe"):
                             if ((command.split()[1])[0] != '#' or len(command.split()[1].split('#')) != 2):
                                 commandUsage()
-                            else:
+                            elif len(command.split()[1]) < 2:
+                                hashtagCannotBeOfSizeOne()
+                            elif len(command.split()[1]) > 25:
+                                hashtagMaxSize()
+                            elif len(subscriptions) >= 3:
+                                maxSubs()
+                            elif command.split()[1] not in subscriptions:
+                                subscriptions.append(command.split()[1])
                                 s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
+                            else:
+                                print("You are already subscribed to this tag")
+                            print(subscriptions)
+                        elif command.split()[0] == "unsubscribe":
+                            if ((command.split()[1])[0] != '#' or len(command.split()[1].split('#')) != 2):
+                                commandUsage()
+                            elif command.split()[1] in subscriptions:
+                                subscriptions.remove(command.split()[1])
+                                s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
+                            else:
+                                print("You are not subscribed")
                         elif (command.split()[0] == "tweet"):
                             #only 8 hashtags
                             #max size of 25 per hashtag
@@ -155,5 +174,8 @@ def socketError(msg):
     print( 'Socket Error' )
     print( msg )
     sys.exit(3)
+
+def maxSubs():
+    print("Too many subscriptions.")
 
 main( sys.argv )

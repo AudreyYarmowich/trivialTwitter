@@ -33,7 +33,7 @@ def handle_client(connection,address,user):
                 print (tags)
                 tweet = str(user) + ": " + str(tweet) + ' ' + ''.join(tags)
                 print (tweet)
-                usersTweetSentTo = [user]
+                usersTweetSentTo = []
                 for tag in tags:
                     if (tag in hashtags.keys()):
                         for u in hashtags[tag]:
