@@ -92,7 +92,6 @@ def main(argv):
                             elif flag == 1:
                                 hashtagCannotBeOfSizeOne()
                             else:
-                                print("here is the bad boi")
                                 s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
 
                         else:

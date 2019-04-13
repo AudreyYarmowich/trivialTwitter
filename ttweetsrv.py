@@ -24,7 +24,6 @@ def handle_client(connection,address,user):
             if (data == "b''"):
                 raise ConnectionError('keyboard end connection')
             if ("tweet" in data.split()[0]):
-                print("AAAAAAA")
                 tweet = data.split('"')[1]
                 tags = data.split('"')[2][:-1].split('#')[1:]
 
