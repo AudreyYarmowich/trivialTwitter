@@ -102,6 +102,8 @@ def main(argv):
                                 tooManyTags()
                             elif flag_2 == 1:
                                 hashtagMaxSize()
+                            elif "ALL" in tags:
+                                ALLnotAllowedWhenTweeting()
                             else:
                                 s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
 
@@ -121,6 +123,10 @@ def commandUsage():
     print ('unsubscribe #<hastag>')
     print ('tweet "<message <= 150 characters>" [#<hastag>]>')
     print ('exit\n')
+
+
+def ALLnotAllowedWhenTweeting():
+    print("#ALL is not allowed when tweeting")
 
 def tooManyTags():
     print("Only a maximum of 8 tags allowed in a tweet")
