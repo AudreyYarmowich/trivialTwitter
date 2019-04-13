@@ -1,27 +1,28 @@
-Ttweet protocol v1.0
+Ttweet protocol v2.0
 
-Author: Benjamin Yarmowich
-Date: February 10, 2019
+Author: Benjamin Yarmowich and Vivian Thiebaut
+Date: April 12, 2019
 
 Ttweet uses a standard TCP connection.
 A Ttweet server binds to a port number and remains actively waiting for connections. 
-The client must provide a request for connection (SYN) including an initial sequence number.
-Upon an attempt to connect the server responds with an accept request message (ACK) that includes the initial sequence number (from the SYN) + 1
-The client must then respond with a message (ACK) that includes the returned sequence number (from the server ACK) + 1 (again so the end number is initial sequence number + 2)
+Clients must provide a request for connection. Upon an attempt to connect the server 
+creates a new thread to handle requests from that client while the current thread remains 
+waiting for other requests from different clients. When the client estabilishes a connection
+with the server it creates a new thread to listen to tweets that are redirected by the server
+while the current thread deals with requests.
 
 A connection is now established. 
-The server will then expect a binary message in the form of "(<isDownload>, '<Message>')"
-isDownload should contain the string "True" if the client is in download mode and the string "False" if the client is in upload mode.
-A Message should be no longer than 150 characters in length.
-
-Download mode:
-If isDownload equals "True" the server will reply with the last saved message. If no message has been saved before it will return "Empty Message"
-
-Upload mode:
-If isDownload equals "False" the server will attempt to save the Message. If the message is saved successfully the server will reply "message upload successful" otherwise it will reply with the error encountered
-
-At start up the server will print the host and port it is bound to.
-As connections come in it will print the host and port of the client connecting to it and then the value of message after handling the client request.
-
-A ttweet server will stay up until it is exited by a user.
-Any errors encountered will be printed and then the server will return to listening and handling requests.
+The server will keep a dictionary (users) with the connectios of every user with the server
+(so that all the threads can send messages to all clients), and a dicionary (hashtags) where the keys 
+are hashtags and the value is a list of all the users subscribed to that hashtag.
+The client will be able to send the following requests to the server:
+1. tweet: the client sends a message to the server, and the server directs that message to all the
+users subscribed to the hashtags in the tweet.
+2. timeline: the client prints all the tweets directed to it, that are all stored in an list. They don't
+need to make any requests to the server.
+3. subscribe: the server will add the user to the list of users that are subscribed to that hashtag
+(using the dictionary hashtags)
+4. unsubscribed: the server will remove the user from the list of people subscribed to that hashtag in 
+the hashtags dictionary
+5. exit: user is removed from users dictionary and from all the lists of subscriptions from all the 
+hashtags it was subscribed to. Connection is closed.

@@ -25,9 +25,12 @@ def handle_client(connection,address,user):
                 raise ConnectionError('keyboard end connection')
             if ("tweet" in data.split()[0]):
                 tweet = data.split('"')[1]
+                #check if first char is #
                 tags = data.split('"')[2][:-1].split('#')[1:]
+                
                 for i in range(len(tags)):
                     tags[i] = '#'+tags[i]
+                #change code so that tags of size 0 are ilegal
                 print (tags)
                 tweet = str(user) + ": " + str(tweet) + ' ' + ''.join(tags)
                 print (tweet)
