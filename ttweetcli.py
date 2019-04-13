@@ -28,7 +28,9 @@ def main(argv):
     else:
         usage()
 
-    if( not username.isalnum() ):
+
+    #not working for & but I guess thats life
+    if username.isalnum()==False :
         print( 'Username must only contain letters and numbers' )
         sys.exit(2)
 
@@ -75,13 +77,18 @@ def main(argv):
                             #max size of 25 per hashtag
                             #only alphanumeric characters
                             tags = command.split('"')[2].split('#')[1:]
-                            print(tags)
+                            print("Tags:",tags)
+
+
                             flag = 0
+                            flag_2 = 0
                             if (len(tags) == 0):
                                 flag = 1
                             for i in range(len(tags)):
                                 if len(tags[i]) == 0:
                                     flag = 1
+                                if len(tags[i])>24:
+                                    flag_2 = 1
 
                             if ((command.split('"')[2])[1] != '#'):
                                 commandUsage()
@@ -91,11 +98,14 @@ def main(argv):
                                 messageTooLong(len(command.split('"')[1]))
                             elif flag == 1:
                                 hashtagCannotBeOfSizeOne()
+                            elif len(tags) > 8:
+                                tooManyTags()
+                            elif flag_2 == 1:
+                                hashtagMaxSize()
                             else:
                                 s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
 
                         else:
-                            print("a")
                             s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
                             if (command.split('""')[0]  == "exit"):
                                 sys.exit(0)
@@ -112,9 +122,11 @@ def commandUsage():
     print ('tweet "<message <= 150 characters>" [#<hastag>]>')
     print ('exit\n')
 
+def tooManyTags():
+    print("Only a maximum of 8 tags allowed in a tweet")
 def usage():
     print( '\nUsage Error:')
-    print( 'Usage:$ ./ttweetcl <ServerIP> <ServerPort> <Username>\n' )
+    print( 'Usage:$ python ttweetcli.py <ServerIP> <ServerPort> <Username>\n' )
     sys.exit(2)
 
 def messageTooLong(messageLength):
@@ -128,6 +140,10 @@ def messageCannotBeEmpty():
 def hashtagCannotBeOfSizeOne():
     print( '\nUsage Error')
     print( "Hashtag can't be empty\n")
+
+def hashtagMaxSize():
+    print( '\nUsage Error')
+    print( "Hashtag can't be longer than 24 characters\n")
 
 def socketError(msg):
     print( 'Socket Error' )

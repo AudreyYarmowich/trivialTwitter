@@ -15,17 +15,17 @@ iv. The code for ttweetsrv and ttweetcli are written exclusively in Python 3.4.5
 
 	To run the ttweet program on the shuttles:
 		In Bash use ifconfig to find the ip address of the shuttle that will be your host
-		Run "python ttweetsrv.py <host address> <port number>"
+		Run "python ttweetsrv.py <port number>"
 		Open another tab/window of bash
-		Run "python ttweetcli.py -d/u <host address> <port number> "Message"" \
+		Run "python ttweetcli.py <host address> <port number> <username> \
 			For full usage documentation run "python ttweetcli.py -usage" 
+		To run the commands on the client, use the following formats
+		tweet "<tweet message>" #<hashtags>
+		subscribe #<hashtag>
+		unsubscribe #<hashtag>
+		timeline
+		exit 
 
-	To run the ttweet program on a local machine:
-		In cmd or bash run "python ttweetsrv.py" this will default the host to 127.0.0.1 and port to 13069
-		Open another tab/window of cmd or bash
-		Run "python ttweetcli.py -d/u <host address> <port number> "Message"" \
-			For full usage documentation run "python ttweetcli.py -usage" 
-			If you provide no arguements ttweetcli.py will upload a default message to 127.0.0.1:13069
 
 v. For an output sample after running the provided Test Scenario please see sample.png
 

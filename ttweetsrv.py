@@ -72,9 +72,9 @@ def handle_client(connection,address,user):
                         hashtags[tag].remove(user)
                 users.pop(user)
                 connection.close()
-                print("Connection closed.")
-                print (hashtags)
-                print (users)
+                print("Connection closed with", user)
+                #print (hashtags)
+                #print (users)
                 break
     except ConnectionError as error:
         #TODO: Remove user and connection from all subscriptions
@@ -110,6 +110,7 @@ def main(argv):
                 else:
                     users[user] = conn
                     conn.sendall( b'200' )
+                    print ("Connection estabilished with", user)
                     thread.start_new_thread(handle_client,(conn,addr,user))
 
             except socket.error as msg:
