@@ -71,8 +71,11 @@ def main(argv):
                             else:
                                 s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
                         elif (command.split()[0] == "tweet"):
-
-                            tags = command.split('"')[2][:-1].split('#')[1:]
+                            #only 8 hashtags
+                            #max size of 25 per hashtag
+                            #only alphanumeric characters
+                            tags = command.split('"')[2].split('#')[1:]
+                            print(tags)
                             flag = 0
                             if (len(tags) == 0):
                                 flag = 1
