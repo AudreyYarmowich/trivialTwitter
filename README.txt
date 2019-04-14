@@ -8,10 +8,10 @@ iii. ttweetsrv.py 		#the server as requested in the documents
      sample.png			#a screenshot of the Test Scenario executed on the shuttles (server was running on shuttle 4 and the client was running on shuttle 1)
      README.txt 		#the document that explains the homework submision
 
-iv. The code for ttweetsrv and ttweetcli are written exclusively in Python 3.4.5 (it should work in all versions of Python 3 but I have extensively tested it in 3.4.5)
-    If Python3.4.5 is not present on your machine I will provide temporary install instructions for a unix machine below
+iv. The code for ttweetsrv and ttweetcli are written exclusively in Python 3.7.3 (it should work in all versions of Python 3 but I have extensively tested it in 3.4.5)
+    If Python3.7.3 is not present on your machine I will provide temporary install instructions for a unix machine below
 
-	If python 3.4.5 is installed but is not currently being pointed to double check the .bashrc file and then run "source ~/.bashrc"
+	If python 3.7.3 is installed but is not currently being pointed to double check the .bashrc file and then run "source ~/.bashrc"
 
 	To run the ttweet program on the shuttles:
 		In Bash use ifconfig to find the ip address of the shuttle that will be your host
@@ -35,29 +35,29 @@ vii. Known Bug: While running the server on the shuttles if a connection is atte
 		In this case the server prints "Server Socket Error: [Errno 98] Address already in use" and waits for the address to be available before returning its response
 
 
-How to install Python 3.4.5 on a cc.shuttle:
+How to install Python 3.7.3 on a cc.shuttle:
 	Open an ssh connection to the shuttle
 	"mkdir ~/python"
 	"cd ~/python"
-	"wget https://www.python.org/ftp/python/3.4.5/Python-3.4.5.tgz"
-	"tar zxfv Python-3.4.5.tgz"
-	"cd Python-3.4.5/"
+	"wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tgz"
+	"tar zxfv Python-3.7.3.tgz"
+	"cd Python-3.7.3/"
 	"./configure --prefix=$HOME/python"
 	"make"
 	"make install"
 	"vim ~/.bashrc"
 	scroll to the bottom of the file
 	"i"
-	"export PATH=$HOME/python/Python-3.4.5/:$PATH"
+	"export PATH=$HOME/Python-3.7.3/:$PATH"
 	":wq"
 	"source ~/.bashrc"
 	
-	now running python --version should return Python 3.4.5
+	now running python --version should return Python 3.7.3
 
 To uninstall:
 	"rm -r ~/python"
 	"vim ~/.bashrc"
-	scroll to the line reading "export PATH=$HOME/python/Python-3.4.5/:$PATH"
+	scroll to the line reading "export PATH=$HOME/python/Python-3.7.3/:$PATH"
 	"dd"
 	":wq"
 	

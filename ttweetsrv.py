@@ -1,6 +1,6 @@
 import socket
 import sys
-import _thread as thread
+import threading
 import re
 
 users = {};
@@ -93,7 +93,7 @@ def handle_client(connection,address,user):
 
 
 def main(argv):
-    host = '127.0.0.1'  # Default host ip address (localhost)
+    host = socket.gethostbyname(socket.gethostname()) # Default host ip address (localhost)
     port = 13069        # Default port to listen on
     if( len( sys.argv ) == 2):
         port = sys.argv[1] # Allows the user to override default host and port #
@@ -117,12 +117,13 @@ def main(argv):
                     users[user] = conn
                     conn.sendall( b'200' )
                     print ("Connection estabilished with", user)
-                    thread.start_new_thread(handle_client,(conn,addr,user))
-
+                    thread = threading.Thread(target=handle_client, args=(conn,addr,user))
+                    thread.daemon = True
+                    thread.start()
             except socket.error as msg:
                 if ( msg.errno == 98 and err98_handler == False ):
-                    print( "Server Socket Error" )
-                    print( msg )
+                    #print( "Server Socket Error" )
+                    #print( msg )
                     err98_handler = True
                 if ( msg.errno != 98 ):
                     print( "Server Socket Error" )

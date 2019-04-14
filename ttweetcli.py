@@ -82,7 +82,7 @@ def main(argv):
                                 s.sendall( bytes( str ( ( command ) ), 'utf-8' ) )
                             else:
                                 print("You are already subscribed to this tag")
-                            print(subscriptions)
+                            print("Your subscriptions: ",subscriptions)
                         elif command.split()[0] == "unsubscribe":
                             if ((command.split()[1])[0] != '#' or len(command.split()[1].split('#')) != 2):
                                 commandUsage()
@@ -96,7 +96,7 @@ def main(argv):
                             #max size of 25 per hashtag
                             #only alphanumeric characters
                             tags = command.split('"')[2].split('#')[1:]
-                            print("Tags:",tags)
+                            #print("Tags:",tags)
 
 
                             flag = 0
