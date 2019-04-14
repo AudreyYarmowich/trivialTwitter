@@ -100,11 +100,10 @@ def main(argv):
     elif( len( sys.argv ) != 2): #changed from >2 to !=2 because according to PDF if can accept ONE (in bold) argument
         usage()
     print( 'Connected at', host, ':', port )
-    while True:
-        with socket.socket( socket.AF_INET, socket.SOCK_STREAM ) as s:
-            err98_handler = False  # Handles printing of err98 a common error. This boolean makes sure it only prints once
-            try:
-                s.bind( ( host, int( port ) ) ) # Binds the server to the specified host and port
+    with socket.socket( socket.AF_INET, socket.SOCK_STREAM ) as s:
+        try:
+            s.bind( ( host, int( port ) ) ) # Binds the server to the specified host and port
+            while True:
                 s.listen(1)                     # Server is now listening on the bound host and port
                 conn, addr = s.accept()         # On connection request, complete the three way handshake
                 data = conn.recv(1024)  # Handles recieving messages of any length
@@ -120,17 +119,17 @@ def main(argv):
                     thread = threading.Thread(target=handle_client, args=(conn,addr,user))
                     thread.daemon = True
                     thread.start()
-            except socket.error as msg:
-                if ( msg.errno == 98 and err98_handler == False ):
-                    #print( "Server Socket Error" )
-                    #print( msg )
-                    err98_handler = True
-                if ( msg.errno != 98 ):
-                    print( "Server Socket Error" )
-                    print( msg )
-            except ConnectionError as error:
-                print( user , "disconected" )
-                users.remove(user)
+        except socket.error as msg:
+            if ( msg.errno == 98 ):
+                print( "Server Socket Error" )
+                print( msg )
+                err98_handler = True
+            if ( msg.errno != 98 ):
+                print( "Server Socket Error" )
+                print( msg )
+        except ConnectionError as error:
+            print( user , "disconected" )
+            users.remove(user)
 
 
 

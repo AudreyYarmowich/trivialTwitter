@@ -1,20 +1,20 @@
-i.   Benjamin Yarmowich -- TheBestStudent@gatech.edu
+i.   Benjamin Yarmowich and Vivian Thiebaut -- TheBestStudent@gatech.edu, vivian.thiebaut@gatech.edu
 
-ii.  CS 3251 Networking: Febrauary 12th 2019 Programming Assignment 1
+ii.  CS 3251 Networking: April 2nd 2019 Programming Assignment 2
 
 iii. ttweetsrv.py 		#the server as requested in the documents
      ttweetcli.py 		#the client as requested in the documents
      ttweet_protocol.txt 	#the protocol for ttweet as written
-     sample.png			#a screenshot of the Test Scenario executed on the shuttles (server was running on shuttle 4 and the client was running on shuttle 1)
+     exampleProgramFlow.png	#a screenshot of the provided example program flow running on the COC shuttles (The shuttle on the right running the server is shuttle 5, the top left is shuttle 3, and the bottom left is shuttle 4)
+     sample.png			#a screenshot of a Test Scenario executed on my desktop (server was running on in the bottom right and the clients were running on all other terminals)
      README.txt 		#the document that explains the homework submision
 
-iv. The code for ttweetsrv and ttweetcli are written exclusively in Python 3.7.3 (it should work in all versions of Python 3 but I have extensively tested it in 3.4.5)
-    If Python3.7.3 is not present on your machine I will provide temporary install instructions for a unix machine below
+iv. The code for ttweetsrv and ttweetcli are written exclusively in Python 3.7.1 (it should work in all versions of Python greater than 3.6 but I have extensively tested it in 3.7.1)
+    If Python3.7.1 is not present on your machine I will provide temporary install instructions for a unix machine below
 
-	If python 3.7.3 is installed but is not currently being pointed to double check the .bashrc file and then run "source ~/.bashrc"
+	If python 3.7.1 is installed but is not currently being pointed to double check the .bashrc file and then run "source ~/.bashrc"
 
 	To run the ttweet program on the shuttles:
-		In Bash use ifconfig to find the ip address of the shuttle that will be your host
 		Run "python ttweetsrv.py <port number>"
 		Open another tab/window of bash
 		Run "python ttweetcli.py <host address> <port number> <username> \
@@ -27,37 +27,35 @@ iv. The code for ttweetsrv and ttweetcli are written exclusively in Python 3.7.3
 		exit 
 
 
-v. For an output sample after running the provided Test Scenario please see sample.png
+v. For an output sample after running a Test Scenario please see sample.png
 
 vi. See ttweet_protocol.txt for the full protocol description
 
-vii. Known Bug: While running the server on the shuttles if a connection is attempted while the server is still processing the last request, the server will report error 98 and will respond to the newest request when it can.
-		In this case the server prints "Server Socket Error: [Errno 98] Address already in use" and waits for the address to be available before returning its response
+vii. no bugs are known
 
-
-How to install Python 3.7.3 on a cc.shuttle:
+How to install Python 3.7.1 on a cc.shuttle:
 	Open an ssh connection to the shuttle
 	"mkdir ~/python"
 	"cd ~/python"
-	"wget https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tgz"
-	"tar zxfv Python-3.7.3.tgz"
-	"cd Python-3.7.3/"
+	"wget https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz"
+	"tar zxfv Python-3.7.1.tgz"
+	"cd Python-3.7.1/"
 	"./configure --prefix=$HOME/python"
 	"make"
 	"make install"
 	"vim ~/.bashrc"
 	scroll to the bottom of the file
 	"i"
-	"export PATH=$HOME/Python-3.7.3/:$PATH"
+	"export PATH=$HOME/Python-3.7.1/:$PATH"
 	":wq"
 	"source ~/.bashrc"
 	
-	now running python --version should return Python 3.7.3
+	now running python --version should return Python 3.7.1
 
 To uninstall:
 	"rm -r ~/python"
 	"vim ~/.bashrc"
-	scroll to the line reading "export PATH=$HOME/python/Python-3.7.3/:$PATH"
+	scroll to the line reading "export PATH=$HOME/python/Python-3.7.1/:$PATH"
 	"dd"
 	":wq"
 	

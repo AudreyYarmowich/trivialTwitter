@@ -65,7 +65,7 @@ def main(argv):
                             else:
                                 print("\nTimeline: ")
                                 for tweet in unread_subscribed_tweets:
-                                    print(username, tweet)
+                                    print(username, "receives message from", tweet)
                                 print ('')
                                 unread_subscribed_tweets.clear()
                         elif (command.split()[0] == "subscribe"):
